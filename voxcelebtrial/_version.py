@@ -42,10 +42,10 @@ def get_config():
     cfg.VCS = "git"
     cfg.style = "pep440"
     cfg.tag_prefix = ""
-    # replace mydatabase the same way you did in "setup.py"
-    cfg.parentdir_prefix = "pyannote-db-mydatabase-"
-    # replace MyDatabase the same way you did in "setup.py"
-    cfg.versionfile_source = "MyDatabase/_version.py"
+    # replace voxcelebtrial the same way you did in "setup.py"
+    cfg.parentdir_prefix = "pyannote-db-voxcelebtrial-"
+    # replace VoxCelebTrial the same way you did in "setup.py"
+    cfg.versionfile_source = "VoxCelebTrial/_version.py"
     cfg.verbose = False
     return cfg
 

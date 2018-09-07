@@ -31,11 +31,11 @@ import versioneer
 from setuptools import setup, find_packages
 
 setup(
-    # replace "mydatabase" by the name of your database
-    name='pyannote.db.mydatabase',
+    # replace "voxcelebtrial" by the name of your database
+    name='pyannote.db.voxcelebtrial',
 
-    # replace "MyDatabase" by the name of your database
-    description="MyDatabase plugin for pyannote-database",
+    # replace "VoxCelebTrial" by the name of your database
+    description="VoxCelebTrial plugin for pyannote-database",
 
     # replace with your information
     author='Hervé Bredin',
@@ -45,9 +45,9 @@ setup(
     cmdclass=versioneer.get_cmdclass(),
     packages=find_packages(),
 
-    # replace "MyDatabase" by the new name of MyDatabase directory
+    # replace "VoxCelebTrial" by the new name of VoxCelebTrial directory
     package_data={
-        'MyDatabase': [
+        'VoxCelebTrial': [
             'data/*',
         ],
     },
@@ -68,9 +68,9 @@ setup(
         "Topic :: Scientific/Engineering"
     ],
 
-    # replace MyDatabase by the name of your database (using CamelCase)
+    # replace VoxCelebTrial by the name of your database (using CamelCase)
     entry_points="""
         [pyannote.database.databases]
-        MyDatabase=MyDatabase:MyDatabase
+        VoxCelebTrial=VoxCelebTrial:VoxCelebTrial
     """
 )
