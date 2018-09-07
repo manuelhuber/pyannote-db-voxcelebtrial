@@ -25,17 +25,17 @@
 
 # AUTHORS
 # Hervé BREDIN - http://herve.niderb.fr
-
+from pyannote.core import Annotation, Segment
 
 from ._version import get_versions
+
 __version__ = get_versions()['version']
 del get_versions
-
 
 import os.path as op
 from pyannote.database import Database
 from pyannote.database.protocol import SpeakerDiarizationProtocol
-from pyannote.parser import MDTMParser
+
 
 # this protocol defines a speaker diarization protocol: as such, a few methods
 # needs to be defined: trn_iter, dev_iter, and tst_iter.
@@ -43,7 +43,7 @@ from pyannote.parser import MDTMParser
 class MyProtocol1(SpeakerDiarizationProtocol):
     """My first speaker diarization protocol """
 
-    def trn_iter(self):
+    def tst_iter(self):
 
         # absolute path to 'data' directory where annotations are stored
         data_dir = op.join(op.dirname(op.realpath(__file__)), 'data')
@@ -51,20 +51,22 @@ class MyProtocol1(SpeakerDiarizationProtocol):
         # in this example, we assume annotations are distributed in MDTM format.
         # this is obviously not mandatory but pyannote.parser conveniently
         # provides a built-in parser for MDTM files...
-        annotations = MDTMParser().read(
-            op.join(data_dir, 'protocol1.train.mdtm'))
+        annotations = open(op.join(data_dir, 'file_list.txt')).readlines()
 
         # iterate over each file in training set
-        for uri in sorted(annotations.uris):
-
+        for line in sorted(annotations):
+            uri, duration = line.split()
             # get annotations as pyannote.core.Annotation instance
-            annotation = annotations(uri)
+
+            annotation = Annotation(uri=uri)
+            segment = Segment(0., float(duration))
+            annotation[segment] = uri.split("/")[0]
 
             # `trn_iter` (as well as `dev_iter` and `tst_iter`) are expected
             # to yield dictionary with the following fields:
             yield {
                 # name of the database class
-                'database': 'MyDatabase',
+                'database': 'VoxCelebTrial',
                 # unique file identifier
                 'uri': uri,
                 # reference as pyannote.core.Annotation instance
@@ -80,27 +82,27 @@ class MyProtocol1(SpeakerDiarizationProtocol):
             # for instance. whenever possible, please provide the 'annotated'
             # field even if it trivially contains segment [0, file_duration].
 
-
     def dev_iter(self):
         # here, you should do the same as above, but for the development set
         for _ in []:
             yield
 
-    def tst_iter(self):
+    def trn_iter(self):
         # here, you should do the same as above, but for the test set
         for _ in []:
             yield
 
+
 # this is where we define each protocol for this database.
 # without this, `pyannote.database.get_protocol` won't be able to find them...
 
-class MyDatabase(Database):
-    """MyDatabase database"""
+class VoxCelebTrial(Database):
+    """VoxCelebTrial database"""
 
     def __init__(self, preprocessors={}, **kwargs):
-        super(MyDatabase, self).__init__(preprocessors=preprocessors, **kwargs)
+        super(VoxCelebTrial, self).__init__(preprocessors=preprocessors, **kwargs)
 
         # register the first protocol: it will be known as
-        # MyDatabase.SpeakerDiarization.MyFirstProtocol
+        # VoxCelebTrial.SpeakerDiarization.MyFirstProtocol
         self.register_protocol(
-            'SpeakerDiarization', 'MyFirstProtocol', MyProtocol1)
+            'SpeakerDiarization', 'Trial', MyProtocol1)

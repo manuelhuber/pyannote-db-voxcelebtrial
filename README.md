@@ -1,3 +1,6 @@
+# VoxCelebTrial
+This is a simple db adapter that lists all files from the [trial pairs](http://www.robots.ox.ac.uk/~vgg/data/voxceleb/meta/veri_test.txt) as tst files. This DB does not contain train or development data. It is only used to generate features / embeddings etc. for the files. 
+
 # pyannote.database plugin
 
 This repository provides a template for creating your own [`pyannote.database`](http://github.com/pyannote/pyannote-database) plugin.
