@@ -43,7 +43,7 @@ from pyannote.database.protocol import SpeakerDiarizationProtocol
 class MyProtocol1(SpeakerDiarizationProtocol):
     """My first speaker diarization protocol """
 
-    def tst_iter(self):
+    def _iter(self, filename):
 
         # absolute path to 'data' directory where annotations are stored
         data_dir = op.join(op.dirname(op.realpath(__file__)), 'data')
@@ -51,7 +51,7 @@ class MyProtocol1(SpeakerDiarizationProtocol):
         # in this example, we assume annotations are distributed in MDTM format.
         # this is obviously not mandatory but pyannote.parser conveniently
         # provides a built-in parser for MDTM files...
-        annotations = open(op.join(data_dir, 'file_list.txt')).readlines()
+        annotations = open(op.join(data_dir, filename)).readlines()
 
         # iterate over each file in training set
         for line in sorted(annotations):
@@ -82,15 +82,16 @@ class MyProtocol1(SpeakerDiarizationProtocol):
             # for instance. whenever possible, please provide the 'annotated'
             # field even if it trivially contains segment [0, file_duration].
 
+    def tst_iter(self):
+        return self._iter('test_files.txt')
+
     def dev_iter(self):
         # here, you should do the same as above, but for the development set
         for _ in []:
             yield
 
     def trn_iter(self):
-        # here, you should do the same as above, but for the test set
-        for _ in []:
-            yield
+        return self._iter('train_files.txt')
 
 
 # this is where we define each protocol for this database.
