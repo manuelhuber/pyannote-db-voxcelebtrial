@@ -55,12 +55,16 @@ class MyProtocol1(SpeakerDiarizationProtocol):
 
         # iterate over each file in training set
         for line in sorted(annotations):
+            if not line.strip():
+                continue
+
             uri, duration = line.split()
             # get annotations as pyannote.core.Annotation instance
 
             annotation = Annotation(uri=uri)
             segment = Segment(0., float(duration))
             annotation[segment] = uri.split("/")[0]
+            annotated = annotation.get_timeline()
 
             # `trn_iter` (as well as `dev_iter` and `tst_iter`) are expected
             # to yield dictionary with the following fields:
@@ -70,7 +74,8 @@ class MyProtocol1(SpeakerDiarizationProtocol):
                 # unique file identifier
                 'uri': uri,
                 # reference as pyannote.core.Annotation instance
-                'annotation': annotation
+                'annotation': annotation,
+                'annotated': annotated,
             }
 
             # optionally, an 'annotated' field can be added, whose value is
